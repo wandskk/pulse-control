@@ -17,6 +17,10 @@ import { APP_SHELL_CONTAINER } from "@/lib/constants/layout";
 import { formPrimarySubmitFullWidthClassName } from "@/lib/constants/ui";
 import { InstallPwaLoginHint } from "@/components/shared/install-pwa";
 import { apiFetch } from "@/lib/api-client/http";
+import {
+  beginGlobalLoading,
+  endGlobalLoading,
+} from "@/lib/global-loading/store";
 import { cn } from "@/lib/utils";
 
 export function LoginForm() {
@@ -67,6 +71,7 @@ export function LoginForm() {
       return;
     }
     setPending(true);
+    beginGlobalLoading();
     try {
       const res = await apiFetch("/api/auth/bootstrap", {
         method: "POST",
@@ -76,13 +81,16 @@ export function LoginForm() {
       const json = (await res.json()) as { message?: string };
       if (!res.ok) {
         toast.error(json.message ?? "Não foi possível criar o administrador.");
+        endGlobalLoading();
         return;
       }
       const dest = searchParams.get("from");
-      router.push(dest && dest.startsWith("/") ? dest : "/");
-      router.refresh();
+      await router.push(dest && dest.startsWith("/") ? dest : "/");
+      await router.refresh();
+      endGlobalLoading();
     } catch {
       toast.error("Erro de rede.");
+      endGlobalLoading();
     } finally {
       setPending(false);
     }
@@ -95,6 +103,7 @@ export function LoginForm() {
       return;
     }
     setPending(true);
+    beginGlobalLoading();
     try {
       const res = await apiFetch("/api/auth/login", {
         method: "POST",
@@ -104,13 +113,16 @@ export function LoginForm() {
       const json = (await res.json()) as { message?: string };
       if (!res.ok) {
         toast.error(json.message ?? "Não foi possível entrar.");
+        endGlobalLoading();
         return;
       }
       const dest = searchParams.get("from");
-      router.push(dest && dest.startsWith("/") ? dest : "/");
-      router.refresh();
+      await router.push(dest && dest.startsWith("/") ? dest : "/");
+      await router.refresh();
+      endGlobalLoading();
     } catch {
       toast.error("Erro de rede ao entrar.");
+      endGlobalLoading();
     } finally {
       setPending(false);
     }

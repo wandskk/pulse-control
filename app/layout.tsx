@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { GlobalLoadingOverlay } from "@/components/shared/global-loading-overlay";
 import { ServiceWorkerRegister } from "@/components/shared/service-worker-register";
 import { Toaster } from "@/components/ui/sonner";
 import { PWA_THEME_COLOR } from "@/lib/constants/brand";
@@ -57,7 +58,12 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         {children}
-        <Toaster richColors position="top-center" />
+        <GlobalLoadingOverlay />
+        <Toaster
+          richColors
+          position="top-center"
+          className="!z-[200]"
+        />
         <ServiceWorkerRegister />
       </body>
     </html>

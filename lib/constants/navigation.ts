@@ -5,3 +5,8 @@ export function comandosComNumeroHref(deviceId: string): string {
   const q = new URLSearchParams({ [DEVICE_QUERY_PARAM]: deviceId });
   return `/comandos?${q.toString()}`;
 }
+
+export function historicoComNumeroHref(deviceId: string): string {
+  const q = new URLSearchParams({ [DEVICE_QUERY_PARAM]: deviceId });
+  return `/historico?${q.toString()}`;
+}

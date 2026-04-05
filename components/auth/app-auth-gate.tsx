@@ -2,18 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { SessionProvider } from "@/components/auth/session-context";
 import { fetchAuthSession } from "@/lib/api-client/auth";
-import { InlineLoadingText } from "@/components/shared/inline-loading-text";
+import type { AuthSessionInfo } from "@/lib/types/auth";
 
 /**
  * Substitui redirect no layout do servidor (evita 404 / problemas RSC na Vercel).
  * APIs continuam a validar JWT.
+ * Loading visual: overlay global (`apiFetch` em `/api/auth/session`).
  */
 export function AppAuthGate({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [ready, setReady] = useState(false);
   const [allow, setAllow] = useState(false);
+  const [sessionInfo, setSessionInfo] = useState<AuthSessionInfo | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -22,11 +25,13 @@ export function AppAuthGate({ children }: { children: React.ReactNode }) {
         const s = await fetchAuthSession();
         if (cancelled) return;
         if (!s.authRequired) {
+          setSessionInfo(s);
           setAllow(true);
           setReady(true);
           return;
         }
         if (s.authenticated && s.user) {
+          setSessionInfo(s);
           setAllow(true);
           setReady(true);
           return;
@@ -55,13 +60,13 @@ export function AppAuthGate({ children }: { children: React.ReactNode }) {
 
   if (!ready) {
     return (
-      <div className="flex min-h-[40vh] flex-1 items-center justify-center p-6">
-        <InlineLoadingText />
-      </div>
+      <div className="min-h-[40vh] flex-1" aria-hidden />
     );
   }
   if (!allow) {
     return null;
   }
-  return <>{children}</>;
+  return (
+    <SessionProvider value={sessionInfo}>{children}</SessionProvider>
+  );
 }

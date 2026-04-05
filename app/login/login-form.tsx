@@ -16,6 +16,7 @@ import { BRAND_LOGO_SRC } from "@/lib/constants/brand";
 import { APP_SHELL_CONTAINER } from "@/lib/constants/layout";
 import { formPrimarySubmitFullWidthClassName } from "@/lib/constants/ui";
 import { InstallPwaLoginHint } from "@/components/shared/install-pwa";
+import { apiFetch } from "@/lib/api-client/http";
 import { cn } from "@/lib/utils";
 
 export function LoginForm() {
@@ -31,10 +32,10 @@ export function LoginForm() {
     void (async () => {
       try {
         const [b, s] = await Promise.all([
-          fetch("/api/auth/bootstrap", { cache: "no-store" }).then((r) =>
+          apiFetch("/api/auth/bootstrap", { cache: "no-store" }).then((r) =>
             r.json(),
           ) as Promise<{ needsBootstrap?: boolean }>,
-          fetch("/api/auth/session", { cache: "no-store" }).then((r) =>
+          apiFetch("/api/auth/session", { cache: "no-store" }).then((r) =>
             r.json(),
           ) as Promise<{
             authRequired?: boolean;
@@ -67,10 +68,9 @@ export function LoginForm() {
     }
     setPending(true);
     try {
-      const res = await fetch("/api/auth/bootstrap", {
+      const res = await apiFetch("/api/auth/bootstrap", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "same-origin",
         body: JSON.stringify({ email: email.trim(), password }),
       });
       const json = (await res.json()) as { message?: string };
@@ -96,10 +96,9 @@ export function LoginForm() {
     }
     setPending(true);
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await apiFetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "same-origin",
         body: JSON.stringify({ email: email.trim(), password }),
       });
       const json = (await res.json()) as { message?: string };
@@ -124,9 +123,8 @@ export function LoginForm() {
           APP_SHELL_CONTAINER,
           "min-h-[70vh] flex-col justify-center py-10",
         )}
-      >
-        <p className="text-center text-sm text-muted-foreground">Carregando…</p>
-      </div>
+        aria-hidden
+      />
     );
   }
 

@@ -16,7 +16,6 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { ConfirmDestructiveDialog } from "@/components/shared/confirm-destructive-dialog";
 import { EmptyStateCard } from "@/components/shared/empty-state-card";
-import { InlineLoadingText } from "@/components/shared/inline-loading-text";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
@@ -53,7 +52,10 @@ import {
 import type { CategoryDto, CommandDto } from "@/lib/types";
 import { formatPhoneBrDisplay } from "@/lib/utils/phone-br";
 import { APP_SHELL_CONTAINER } from "@/lib/constants/layout";
-import { DEVICE_QUERY_PARAM } from "@/lib/constants/navigation";
+import {
+  DEVICE_QUERY_PARAM,
+  historicoComNumeroHref,
+} from "@/lib/constants/navigation";
 import {
   SELECT_CONTROL_CLASS,
   SELECT_CONTROL_CLASS_TALL,
@@ -345,7 +347,7 @@ export function PulseComandosPage() {
           aria-label="Linha e atalhos"
         >
           {loadingDevices ? (
-            <InlineLoadingText />
+            <div className="min-h-10" aria-hidden />
           ) : devices.length === 0 ? (
             <EmptyStateCard
               icon={Smartphone}
@@ -398,6 +400,12 @@ export function PulseComandosPage() {
                 >
                   Categorias
                 </Link>
+                <Link
+                  href={historicoComNumeroHref(selectedDeviceId)}
+                  className="text-muted-foreground underline-offset-4 transition-colors hover:text-foreground"
+                >
+                  Histórico
+                </Link>
               </div>
             </>
           )}
@@ -449,7 +457,7 @@ export function PulseComandosPage() {
                 Escolha uma linha acima.
               </p>
             ) : loadingCommands ? (
-              <InlineLoadingText />
+              <div className="min-h-8" aria-hidden />
             ) : commands.length === 0 ? (
               <p className="text-sm text-muted-foreground">
                 {categoryFilter !== "all"

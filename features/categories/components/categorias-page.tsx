@@ -16,7 +16,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { ConfirmDestructiveDialog } from "@/components/shared/confirm-destructive-dialog";
 import { EmptyStateCard } from "@/components/shared/empty-state-card";
-import { InlineLoadingText } from "@/components/shared/inline-loading-text";
 import { ListLoadingCenter } from "@/components/shared/list-loading-center";
 import { PageHeaderRow } from "@/components/shared/page-header-row";
 import { RowActionsMenuTrigger } from "@/components/shared/row-actions-menu-trigger";
@@ -210,7 +209,7 @@ export function CategoriasPage() {
           </div>
 
           {loadingDevices ? (
-            <InlineLoadingText />
+            <div className="min-h-10" aria-hidden />
           ) : devices.length === 0 ? (
             <EmptyStateCard
               icon={Smartphone}

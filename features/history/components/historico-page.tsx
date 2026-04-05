@@ -1,6 +1,7 @@
 "use client";
 
 import { History, Loader2, RefreshCw } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
@@ -17,8 +18,13 @@ import { getErrorMessage } from "@/lib/utils/error-message";
 import type { DeviceDto, ExecutionDto } from "@/lib/types";
 import { formatPhoneBrDisplay } from "@/lib/utils/phone-br";
 import { SELECTED_DEVICE_STORAGE_KEY } from "@/lib/storage/selected-device";
+import { DEVICE_QUERY_PARAM } from "@/lib/constants/navigation";
 
 export function HistoricoPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const deviceIdFromUrl = searchParams.get(DEVICE_QUERY_PARAM);
+
   const [devices, setDevices] = useState<DeviceDto[]>([]);
   const [history, setHistory] = useState<ExecutionDto[]>([]);
   /** `undefined` = ainda não sincronizado com o número da home / lista. */
@@ -86,6 +92,19 @@ export function HistoricoPage() {
   }, [devices, loadingDevices]);
 
   useEffect(() => {
+    if (loadingDevices || devices.length === 0) return;
+    if (!deviceIdFromUrl) return;
+    const exists = devices.some((d) => d.id === deviceIdFromUrl);
+    if (!exists) {
+      toast.error("Número não encontrado.");
+      router.replace("/historico", { scroll: false });
+      return;
+    }
+    setFilterDeviceId(deviceIdFromUrl);
+    router.replace("/historico", { scroll: false });
+  }, [loadingDevices, devices, deviceIdFromUrl, router]);
+
+  useEffect(() => {
     if (filterDeviceId === undefined) return;
     if (!firstFilterEffectRef.current) {
       firstFilterEffectRef.current = true;
@@ -151,7 +170,7 @@ export function HistoricoPage() {
         {loadingDevices ||
         (filterDeviceId === undefined && devices.length > 0) ||
         (loadingHistory && history.length === 0) ? (
-          <p className="text-sm text-muted-foreground">Carregando…</p>
+          <div className="min-h-8" aria-hidden />
         ) : history.length === 0 ? (
           <p className="text-sm text-muted-foreground text-center">
             Nenhum envio ainda. Envie um comando e registre aqui.

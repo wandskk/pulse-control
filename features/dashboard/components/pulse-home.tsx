@@ -9,82 +9,70 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
+import { useAppSession } from "@/components/auth/session-context";
 import { Card, CardContent } from "@/components/ui/card";
-import { fetchAuthSession } from "@/lib/api-client";
 import { APP_SHELL_CONTAINER } from "@/lib/constants/layout";
-import type { AuthSessionUser } from "@/lib/types/auth";
 import type { PulseHomeQuickItem } from "@/lib/types/dashboard";
-import { InlineLoadingText } from "@/components/shared/inline-loading-text";
 import { cn } from "@/lib/utils";
 
 export function PulseHome() {
-  const [sessionUser, setSessionUser] = useState<AuthSessionUser | null>(null);
-  const [showLogout, setShowLogout] = useState(false);
-  const [ready, setReady] = useState(false);
+  const session = useAppSession();
+  const sessionUser =
+    session?.authenticated && session?.user ? session.user : null;
+  const showLogout = Boolean(
+    session?.authRequired && session?.authenticated,
+  );
 
-  useEffect(() => {
-    void fetchAuthSession().then((s) => {
-      setShowLogout(s.authRequired && s.authenticated);
-      setSessionUser(s.authenticated && s.user ? s.user : null);
-      setReady(true);
-    });
-  }, []);
-
-  const items: PulseHomeQuickItem[] = [
-    {
-      href: "/comandos",
-      label: "Comandos",
-      description: "Botões e envio de comandos",
-      icon: LayoutGrid,
-      show: true,
-    },
-    {
-      href: "/categorias",
-      label: "Categorias",
-      description: "Grupos por número",
-      icon: Tags,
-      show: true,
-    },
-    {
-      href: "/numeros",
-      label: "Números",
-      description: "Cadastrar linhas",
-      icon: Smartphone,
-      show: true,
-    },
-    {
-      href: "/historico",
-      label: "Histórico",
-      description: "Envios anteriores",
-      icon: History,
-      show: true,
-    },
-    {
-      href: "/profile",
-      label: "Perfil",
-      description: "Senha e conta",
-      icon: UserCircle,
-      show: showLogout,
-    },
-    {
-      href: "/admin",
-      label: "Contas",
-      description: "Administração",
-      icon: Users,
-      show: sessionUser?.role === "ADMIN",
-    },
-  ];
+  const items: PulseHomeQuickItem[] = useMemo(
+    () => [
+      {
+        href: "/comandos",
+        label: "Comandos",
+        description: "Botões e envio de comandos",
+        icon: LayoutGrid,
+        show: true,
+      },
+      {
+        href: "/categorias",
+        label: "Categorias",
+        description: "Grupos por número",
+        icon: Tags,
+        show: true,
+      },
+      {
+        href: "/numeros",
+        label: "Números",
+        description: "Cadastrar linhas",
+        icon: Smartphone,
+        show: true,
+      },
+      {
+        href: "/historico",
+        label: "Histórico",
+        description: "Envios anteriores",
+        icon: History,
+        show: true,
+      },
+      {
+        href: "/profile",
+        label: "Perfil",
+        description: "Senha e conta",
+        icon: UserCircle,
+        show: showLogout,
+      },
+      {
+        href: "/admin",
+        label: "Contas",
+        description: "Administração",
+        icon: Users,
+        show: sessionUser?.role === "ADMIN",
+      },
+    ],
+    [showLogout, sessionUser?.role],
+  );
 
   const visible = items.filter((i) => i.show);
-
-  if (!ready) {
-    return (
-      <div className="flex min-h-[40vh] items-center justify-center p-6">
-        <InlineLoadingText />
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-1 flex-col">

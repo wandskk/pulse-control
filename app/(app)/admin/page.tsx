@@ -148,7 +148,7 @@ export default function AdminUsersPage() {
 
       <section aria-label="Usuários cadastrados">
         {loading ? (
-          <p className="text-sm text-muted-foreground">Carregando…</p>
+          <div className="min-h-8" aria-hidden />
         ) : users.length === 0 ? (
           <p className="text-sm text-muted-foreground">
             Nenhum usuário além do administrador.

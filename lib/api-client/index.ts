@@ -1,3 +1,5 @@
+export { apiFetch } from "./http";
+
 export {
   type SessionUser,
   type AuthSessionInfo,

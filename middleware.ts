@@ -4,9 +4,11 @@ import { type NextRequest, NextResponse } from "next/server";
 const SESSION_COOKIE_NAME = "pulse_session";
 
 /**
- * Next.js 16+: `proxy.ts` corre em runtime **Node.js** (não Edge), evitando
- * `ReferenceError: __dirname is not defined` e outros limites do Edge na Vercel.
- * JWT continua validado nas rotas API (`getSessionFromRequest` / jose).
+ * Edge Runtime (Vercel). Só `next/server` + env + cookie — sem jose nem `__dirname`.
+ * JWT nas rotas API (`getSessionFromRequest`).
+ *
+ * Nota: `proxy.ts` (Node) pode falhar em produção na Vercel até suporte estável;
+ * mantemos `middleware.ts` como recomendado para deploy.
  */
 function isAuthConfigured(): boolean {
   return Boolean(process.env.AUTH_SECRET?.trim());
@@ -16,7 +18,7 @@ function hasSessionCookie(request: NextRequest): boolean {
   return Boolean(request.cookies.get(SESSION_COOKIE_NAME)?.value);
 }
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   if (!isAuthConfigured()) {
     return NextResponse.next();
   }

@@ -56,7 +56,7 @@ export function AppBreadcrumb() {
   return (
     <nav
       aria-label="Trilha de navegação"
-      className={cn(APP_SHELL_CONTAINER, "shrink-0 pb-2 pt-1")}
+      className={cn(APP_SHELL_CONTAINER, "shrink-0 pb-0 pt-4")}
     >
       <ol className="flex flex-wrap items-center gap-x-1 gap-y-0.5 text-xs text-muted-foreground">
         <li className="min-w-0">
@@ -68,7 +68,10 @@ export function AppBreadcrumb() {
           </Link>
         </li>
         {trail.map((c, i) => (
-          <li key={`${i}-${c.href}`} className="flex min-w-0 items-center gap-1">
+          <li
+            key={`${i}-${c.href}`}
+            className="flex min-w-0 items-center gap-1"
+          >
             <ChevronRight className="size-3 shrink-0 opacity-50" aria-hidden />
             {c.current ? (
               <span

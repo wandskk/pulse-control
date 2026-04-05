@@ -1,4 +1,5 @@
-import type { UserRole } from "@prisma/client";
+/** Espelha o enum Prisma `UserRole` — definido aqui para não puxar `@prisma/client` no middleware (Edge). */
+export type UserRole = "ADMIN" | "USER";
 
 /** Claims do JWT após `jwtVerify` */
 export type SessionClaims = {

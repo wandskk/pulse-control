@@ -2,7 +2,7 @@ import { SignJWT } from "jose";
 import type { NextRequest } from "next/server";
 import { SESSION_COOKIE } from "@/lib/constants/session";
 import type { SessionClaims, UserRole } from "@/lib/types/auth";
-import { verifySessionToken } from "./edge-session";
+import { verifySessionToken } from "./jwt-verify";
 import { getJwtSecret } from "./jwt-secret";
 
 export { SESSION_COOKIE } from "@/lib/constants/session";

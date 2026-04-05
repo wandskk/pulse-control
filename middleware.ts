@@ -3,7 +3,7 @@ import {
   SESSION_COOKIE,
   isAuthConfigured,
   verifySessionToken,
-} from "./lib/auth/edge-session";
+} from "./lib/auth/jwt-verify";
 
 export async function middleware(request: NextRequest) {
   if (!isAuthConfigured()) {

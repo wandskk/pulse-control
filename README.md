@@ -1,7 +1,5 @@
 <img width="1157" height="307" alt="Logotipo moderno PulseControl em azul (1)" src="https://github.com/user-attachments/assets/b9927c1a-9ee5-417d-9f61-4640faf8d5b6" />
 
-<img width="970" height="257" alt="Logotipo_moderno_PulseControl_em_azul__1_-removebg-preview" src="https://github.com/user-attachments/assets/921cb264-fabf-416c-af7c-bb17440c0603" />
-
 # PulseControl
 
 **PWA mobile first** para **controle remoto por comandos via SMS**: cadastre números (dispositivos), organize comandos por categorias e dispare mensagens com um toque — com histórico de execuções e backend seguro no **Next.js** (App Router).

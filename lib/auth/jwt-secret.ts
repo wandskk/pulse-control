@@ -1,4 +1,4 @@
-/** Segredo JWT (HS256) — partilhado entre assinatura (Node) e verificação no middleware (Edge). */
+/** Segredo JWT (HS256) — assinatura e verificação nas rotas (Node). */
 export function getJwtSecret(): Uint8Array {
   const s = process.env.AUTH_SECRET?.trim();
   if (!s || s.length < 16) {

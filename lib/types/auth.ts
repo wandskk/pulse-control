@@ -1,4 +1,4 @@
-/** Espelha o enum Prisma `UserRole` — definido aqui para não puxar `@prisma/client` no middleware (Edge). */
+/** Espelha o enum Prisma `UserRole` — definido aqui para não puxar `@prisma/client` em tipos partilhados. */
 export type UserRole = "ADMIN" | "USER";
 
 /** Claims do JWT após `jwtVerify` */

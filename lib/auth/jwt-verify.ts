@@ -1,6 +1,5 @@
 /**
- * Verificação de sessão JWT (HS256) com `jose` — compatível com Node e Edge (middleware Vercel).
- * Imports relativos apenas (sem `@/`) para o bundler do middleware.
+ * Verificação de sessão JWT (HS256) com `jose` — usado em rotas API / `session.ts` (Node).
  */
 import { jwtVerify } from "jose";
 import type { SessionClaims } from "../types/auth";

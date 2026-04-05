@@ -1,18 +1,13 @@
-import { SignJWT, jwtVerify } from "jose";
+import { SignJWT } from "jose";
 import type { NextRequest } from "next/server";
 import { SESSION_COOKIE } from "@/lib/constants/session";
 import type { SessionClaims, UserRole } from "@/lib/types/auth";
+import { verifySessionToken } from "./edge-session";
+import { getJwtSecret } from "./jwt-secret";
 
 export { SESSION_COOKIE } from "@/lib/constants/session";
 export type { SessionClaims } from "@/lib/types/auth";
-
-function getSecret(): Uint8Array {
-  const s = process.env.AUTH_SECRET?.trim();
-  if (!s || s.length < 16) {
-    throw new Error("AUTH_SECRET deve ter pelo menos 16 caracteres");
-  }
-  return new TextEncoder().encode(s);
-}
+export { verifySessionToken };
 
 export async function signSessionToken(claims: {
   userId: string;
@@ -27,24 +22,7 @@ export async function signSessionToken(claims: {
     .setSubject(claims.userId)
     .setIssuedAt()
     .setExpirationTime("7d")
-    .sign(getSecret());
-}
-
-export async function verifySessionToken(
-  token: string,
-): Promise<SessionClaims | null> {
-  try {
-    const { payload } = await jwtVerify(token, getSecret());
-    const sub = payload.sub;
-    const email = payload.email;
-    const role = payload.role;
-    if (!sub || typeof sub !== "string") return null;
-    if (!email || typeof email !== "string") return null;
-    if (role !== "ADMIN" && role !== "USER") return null;
-    return { sub, email, role };
-  } catch {
-    return null;
-  }
+    .sign(getJwtSecret());
 }
 
 export async function getSessionFromRequest(

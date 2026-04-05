@@ -1,6 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { isAuthConfigured } from "@/lib/auth/config";
-import { SESSION_COOKIE, verifySessionToken } from "@/lib/auth/session";
+import {
+  SESSION_COOKIE,
+  isAuthConfigured,
+  verifySessionToken,
+} from "./lib/auth/edge-session";
 
 export async function middleware(request: NextRequest) {
   if (!isAuthConfigured()) {

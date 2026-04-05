@@ -23,6 +23,11 @@ function isIOS(): boolean {
   return /iPad|iPhone|iPod/.test(navigator.userAgent);
 }
 
+function isAndroid(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return /Android/i.test(navigator.userAgent);
+}
+
 function usePwaInstallOffer() {
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(
     null,
@@ -64,12 +69,21 @@ function usePwaInstallOffer() {
     );
   }, []);
 
+  const showAndroidHint = useCallback(() => {
+    toast.info(
+      "No Chrome: menu (⋮) → «Instalar aplicação» ou «Adicionar à página inicial». Noutros browsers, use o menu e procure «Instalar» ou «Adicionar ao ecrã principal».",
+      { duration: 10000 },
+    );
+  }, []);
+
   return {
     installed,
     canPrompt: Boolean(deferred),
     runInstall,
     iosManual: !deferred && isIOS(),
+    androidManual: !deferred && isAndroid(),
     showIosHint,
+    showAndroidHint,
   };
 }
 
@@ -79,8 +93,15 @@ export function InstallPwaMenuItem({
 }: {
   onAfterPick?: () => void;
 }) {
-  const { installed, canPrompt, runInstall, iosManual, showIosHint } =
-    usePwaInstallOffer();
+  const {
+    installed,
+    canPrompt,
+    runInstall,
+    iosManual,
+    androidManual,
+    showIosHint,
+    showAndroidHint,
+  } = usePwaInstallOffer();
 
   if (installed) return null;
 
@@ -118,13 +139,37 @@ export function InstallPwaMenuItem({
     );
   }
 
+  if (androidManual) {
+    return (
+      <Button
+        type="button"
+        variant="ghost"
+        className="h-11 justify-start gap-3 px-0 font-normal"
+        onClick={() => {
+          onAfterPick?.();
+          showAndroidHint();
+        }}
+      >
+        <Download className="size-4 shrink-0" aria-hidden />
+        Como instalar no Android
+      </Button>
+    );
+  }
+
   return null;
 }
 
-/** Linha discreta no login (Chrome/Android mostra quando o evento existir; iOS mostra dica). */
+/** Linha discreta no login: prompt nativo, dica iOS ou dica Android (UA). */
 export function InstallPwaLoginHint({ className }: { className?: string }) {
-  const { installed, canPrompt, runInstall, iosManual, showIosHint } =
-    usePwaInstallOffer();
+  const {
+    installed,
+    canPrompt,
+    runInstall,
+    iosManual,
+    androidManual,
+    showIosHint,
+    showAndroidHint,
+  } = usePwaInstallOffer();
 
   if (installed) return null;
 
@@ -151,6 +196,20 @@ export function InstallPwaLoginHint({ className }: { className?: string }) {
           onClick={showIosHint}
         >
           Como instalar no ecrã principal
+        </button>
+      </p>
+    );
+  }
+
+  if (androidManual) {
+    return (
+      <p className={cn("text-center text-sm text-muted-foreground", className)}>
+        <button
+          type="button"
+          className="font-medium text-primary underline-offset-4 hover:underline"
+          onClick={showAndroidHint}
+        >
+          Como instalar no Android
         </button>
       </p>
     );

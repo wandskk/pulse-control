@@ -6,7 +6,7 @@ Referência para manter respostas e códigos alinhados entre backend e cliente. 
 
 - Corpo JSON nas respostas de erro costuma incluir `{ message: string }`.
 - Listagens com sucesso: `{ data: T[] }` ou `{ data: T }` conforme a rota.
-- Autenticação: com `AUTH_SECRET`, rotas em `/api/*` (exceto `/api/auth/*` públicos indicados) exigem sessão válida nos handlers; páginas em `app/(app)/` exigem cookie no layout (sem middleware Edge na Vercel).
+- Autenticação: com `AUTH_SECRET`, rotas em `/api/*` (exceto `/api/auth/*` públicos indicados) exigem sessão válida nos handlers; páginas em `app/(app)/` usam gate no cliente (`AppAuthGate`) — sem middleware Edge nem redirect no layout do servidor (Vercel).
 - Erros 500 no servidor: logs estruturados em JSON (`lib/internal-error.ts`) com `requestId` (header `x-request-id` ou `x-vercel-id` quando existir), rota, método e IDs de recurso (cuid); sem PII no log.
 
 ---

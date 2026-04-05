@@ -4,6 +4,7 @@ import {
   History,
   Home,
   LayoutGrid,
+  Loader2,
   LogOut,
   Menu,
   Smartphone,
@@ -35,6 +36,7 @@ import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [logoutPending, setLogoutPending] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
   const [sessionUser, setSessionUser] = useState<SessionUser | null>(null);
 
@@ -46,11 +48,14 @@ export function SiteHeader() {
   }, []);
 
   const handleLogout = async () => {
+    if (logoutPending) return;
+    setLogoutPending(true);
     try {
       await logoutSession();
       window.location.href = "/login";
     } catch {
       toast.error("Não foi possível sair.");
+      setLogoutPending(false);
     }
   };
 
@@ -88,7 +93,13 @@ export function SiteHeader() {
         >
           <Menu className="size-5" aria-hidden />
         </Button>
-        <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+        <Sheet
+          open={menuOpen}
+          onOpenChange={(open) => {
+            if (logoutPending && !open) return;
+            setMenuOpen(open);
+          }}
+        >
           <SheetContent id="site-header-menu">
             <SheetHeader>
               <SheetTitle>Menu</SheetTitle>
@@ -211,13 +222,19 @@ export function SiteHeader() {
                     type="button"
                     variant="ghost"
                     className="h-11 justify-start gap-3 px-0 font-normal"
-                    onClick={() => {
-                      setMenuOpen(false);
-                      void handleLogout();
-                    }}
+                    disabled={logoutPending}
+                    aria-busy={logoutPending}
+                    onClick={() => void handleLogout()}
                   >
-                    <LogOut className="size-4 shrink-0" aria-hidden />
-                    Sair
+                    {logoutPending ? (
+                      <Loader2
+                        className="size-4 shrink-0 animate-spin"
+                        aria-hidden
+                      />
+                    ) : (
+                      <LogOut className="size-4 shrink-0" aria-hidden />
+                    )}
+                    {logoutPending ? "A sair…" : "Sair"}
                   </Button>
                 ) : null}
               </nav>

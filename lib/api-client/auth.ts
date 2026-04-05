@@ -1,4 +1,8 @@
 import { apiFetch, parseJson } from "./http";
+import {
+  beginGlobalLoading,
+  endGlobalLoading,
+} from "@/lib/global-loading/store";
 import type {
   AdminUserRow,
   AuthSessionInfo,
@@ -77,6 +81,20 @@ export async function changeOwnPassword(body: {
   if (!res.ok) throw new Error(json.message ?? "Erro ao alterar senha");
 }
 
+/** Logout: overlay global só reposto em erro; em sucesso fica até ao redirect. */
 export async function logoutSession(): Promise<void> {
-  await apiFetch("/api/auth/logout", { method: "POST" });
+  if (typeof window !== "undefined") beginGlobalLoading();
+  try {
+    const res = await apiFetch("/api/auth/logout", { method: "POST" });
+    if (res.status === 401) {
+      return;
+    }
+    if (!res.ok) {
+      const json = await parseJson<{ message?: string }>(res);
+      throw new Error(json.message ?? "Erro ao sair");
+    }
+  } catch (e) {
+    if (typeof window !== "undefined") endGlobalLoading();
+    throw e;
+  }
 }

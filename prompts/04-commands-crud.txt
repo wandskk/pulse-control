@@ -1,0 +1,15 @@
+Leia `docs/02-data-model.md`, `docs/03-api-contract.md`, `docs/05-ui-ux.md` e `docs/07-implementation-plan.md`.
+
+Implemente apenas a Parte 5 do plano:
+- CRUD de comandos
+- modal com título, mensagem e cor
+- listagem por dispositivo
+- rotas API
+- persistência com Prisma
+
+Regras:
+- usar enum de cores predefinidas
+- manter UI mobile first
+- não integrar histórico ainda
+
+Ao final, entregue resumo, arquivos alterados e instruções de teste.

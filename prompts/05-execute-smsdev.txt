@@ -1,0 +1,15 @@
+Leia `docs/03-api-contract.md`, `docs/04-security.md` e `docs/07-implementation-plan.md`.
+
+Implemente apenas a Parte 6 do plano:
+- endpoint `/api/execute`
+- integração server-side com SMS Dev
+- persistência de histórico
+- feedback visual no frontend
+
+Regras:
+- nunca expor a chave da SMS Dev no cliente
+- validar payload com Zod
+- registrar sucesso e falha
+- manter o código simples e organizado
+
+Ao final, entregue resumo, arquivos alterados, envs necessárias e como testar.

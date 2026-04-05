@@ -1,0 +1,14 @@
+Leia `docs/02-data-model.md`, `docs/03-api-contract.md`, `docs/05-ui-ux.md` e `docs/07-implementation-plan.md`.
+
+Implemente apenas a Parte 7 do plano:
+- tela de histórico
+- listagem de execuções
+- status visual
+- filtro simples por dispositivo
+
+Regras:
+- manter leitura fácil no mobile
+- não adicionar analytics nem gráficos
+- interface simples
+
+Ao final, entregue resumo, arquivos alterados e como testar.

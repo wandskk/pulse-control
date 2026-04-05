@@ -1,0 +1,14 @@
+Leia `docs/06-pwa-vercel.md`.
+
+Implemente apenas os ajustes de PWA e deploy:
+- manifest
+- ícones de placeholder se necessário
+- metadados necessários
+- configuração mínima para instalação
+- checklist de deploy na Vercel
+
+Regras:
+- não tratar o app como offline-first para envio de SMS
+- manter estratégia simples e estável
+
+Ao final, entregue resumo, arquivos alterados e checklist de produção.

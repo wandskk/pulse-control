@@ -1,0 +1,21 @@
+Leia os arquivos `docs/00-product-overview.md`, `docs/01-architecture.md` e `docs/07-implementation-plan.md`.
+
+Implemente apenas a Parte 1 do plano:
+- criar projeto Next.js com TypeScript
+- configurar Tailwind
+- configurar shadcn/ui
+- preparar App Router
+- estruturar pastas base
+- preparar base PWA
+
+Regras:
+- não implementar CRUD ainda
+- não integrar SMS ainda
+- não criar autenticação ainda
+- foco mobile first
+- organização por domínio
+
+Ao final:
+- mostre resumo do que foi feito
+- liste arquivos criados/alterados
+- diga como rodar localmente

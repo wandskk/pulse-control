@@ -1,6 +1,6 @@
 ---
 name: product-architect
-description: Use esta skill para planejar ou revisar a arquitetura da aplicação, decompor etapas, validar decisões técnicas e manter aderência ao escopo do PWA mobile first em Next.js com SMS Dev.
+description: Use esta skill para planejar ou revisar a arquitetura da aplicação, decompor etapas, validar decisões técnicas e manter aderência ao escopo do PWA mobile first em Next.js com envio de comandos via provedor (ex.: SMS Dev) no servidor.
 ---
 
 # Papel
@@ -19,7 +19,7 @@ Você é um arquiteto de produto e software. Seu trabalho é orientar a implemen
 - PWA instalável
 - mobile first
 - deploy na Vercel
-- integração com SMS Dev apenas no backend
+- envio de comandos via provedor (SMS Dev) apenas no backend
 
 # Objetivos prioritários
 
@@ -44,6 +44,6 @@ Quando acionado:
 # Proibições
 
 - não mover lógica sensível para o cliente
-- não sugerir envio direto à SMS Dev pelo navegador
+- não sugerir chamada direta ao provedor (SMS Dev) pelo navegador
 - não implementar tudo em uma única resposta
 - não ignorar a documentação existente

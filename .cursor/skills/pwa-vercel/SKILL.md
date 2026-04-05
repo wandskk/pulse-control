@@ -13,7 +13,7 @@ Você é especialista em PWA e deploy na Vercel para aplicações Next.js.
 - instalável no celular
 - backend no próprio Next.js
 - deploy na Vercel
-- integração SMS Dev no servidor
+- provedor de envio (SMS Dev) no servidor
 
 # Responsabilidades
 
@@ -25,7 +25,7 @@ Você é especialista em PWA e deploy na Vercel para aplicações Next.js.
 
 # Regras
 
-- não tratar o app como offline-first para envio de SMS
+- não tratar o app como offline-first para envio de comandos
 - não prometer envio sem internet
 - manter caching conservador
 - priorizar estabilidade

@@ -20,9 +20,9 @@ Você é um implementador sênior de features em Next.js. Seu foco é gerar cód
 
 # Regras de implementação
 
-1. ler primeiro a documentação relevante em `docs/`
+1. ler primeiro a documentação relevante em `docs/` (ex.: `docs/api-contract.md` para contratos de API)
 2. implementar apenas o escopo solicitado
-3. manter organização por domínio em `features/`
+3. manter UI por domínio em `features/`; chamadas HTTP do browser em `lib/api-client/` (barrel `index.ts`); validações Zod em `lib/validators/<domínio>/`; DTOs em `lib/types/`; cliente Prisma em `db/prisma.ts`
 4. usar componentes do shadcn/ui quando fizer sentido
 5. usar validação com Zod
 6. manter tipagem forte

@@ -1,0 +1,95 @@
+// Modelo alinhado a docs/02-data-model.md.
+// URL em prisma.config.ts (env DATABASE_URL) — ex.: Neon PostgreSQL.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         UserRole @default(USER)
+  devices      Device[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Device {
+  id          String      @id @default(cuid())
+  userId      String?
+  name        String
+  phone       String
+  description String?
+  isActive    Boolean     @default(true)
+  user        User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categories Category[]
+  commands    Command[]
+  executions  Execution[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([userId])
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  deviceId  String
+  name      String
+  sortOrder Int       @default(0)
+  isActive  Boolean   @default(true)
+  device    Device    @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  commands  Command[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([deviceId, name])
+  @@index([deviceId])
+}
+
+model Command {
+  id         String      @id @default(cuid())
+  deviceId   String
+  categoryId String?
+  title      String
+  message    String
+  color      String
+  sortOrder  Int         @default(0)
+  isActive   Boolean     @default(true)
+  device     Device      @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  category   Category?   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  executions Execution[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([deviceId])
+  @@index([categoryId])
+}
+
+model Execution {
+  id                String   @id @default(cuid())
+  deviceId          String
+  commandId         String
+  phone             String
+  message           String
+  provider          String
+  providerMessageId String?
+  status            String
+  errorMessage      String?
+  /// Identificador da sessão autenticada (JWT `sub`), se houver — auditoria mínima
+  actorSub          String?
+  device            Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  command           Command  @relation(fields: [commandId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+
+  @@index([deviceId])
+  @@index([commandId])
+}

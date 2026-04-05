@@ -10,6 +10,7 @@ import {
   Trash2,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -52,6 +53,7 @@ import {
 import type { CategoryDto, CommandDto } from "@/lib/types";
 import { formatPhoneBrDisplay } from "@/lib/utils/phone-br";
 import { APP_SHELL_CONTAINER } from "@/lib/constants/layout";
+import { DEVICE_QUERY_PARAM } from "@/lib/constants/navigation";
 import {
   SELECT_CONTROL_CLASS,
   SELECT_CONTROL_CLASS_TALL,
@@ -77,6 +79,8 @@ function isCommandColor(value: string): value is CommandColor {
 }
 
 export function PulseComandosPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const {
     devices,
     loadingDevices,
@@ -105,6 +109,27 @@ export function PulseComandosPage() {
 
   const prevDeviceIdRef = useRef<string | null>(null);
   const deviceJustChangedRef = useRef(false);
+
+  const deviceIdFromUrl = searchParams.get(DEVICE_QUERY_PARAM);
+
+  useEffect(() => {
+    if (loadingDevices || devices.length === 0) return;
+    if (!deviceIdFromUrl) return;
+    const exists = devices.some((d) => d.id === deviceIdFromUrl);
+    if (!exists) {
+      toast.error("Número não encontrado.");
+      router.replace("/comandos", { scroll: false });
+      return;
+    }
+    setSelectedDeviceId(deviceIdFromUrl);
+    router.replace("/comandos", { scroll: false });
+  }, [
+    loadingDevices,
+    devices,
+    deviceIdFromUrl,
+    setSelectedDeviceId,
+    router,
+  ]);
 
   const loadCategories = useCallback(async () => {
     if (!selectedDeviceId) {

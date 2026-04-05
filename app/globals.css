@@ -43,6 +43,7 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-field: var(--field);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -58,6 +59,8 @@
   --foreground: #0f2854;
   --card: #ffffff;
   --card-foreground: #0f2854;
+  /* Fundo de inputs/selects — distinto do fundo da página e do cartão */
+  --field: #f0f9fc;
   --popover: #ffffff;
   --popover-foreground: #0f2854;
   --primary: #4988c4;
@@ -93,6 +96,7 @@
   --foreground: #e8f4fa;
   --card: #1c4d8d;
   --card-foreground: #e8f4fa;
+  --field: #0f2854;
   --popover: #1c4d8d;
   --popover-foreground: #e8f4fa;
   --primary: #4988c4;

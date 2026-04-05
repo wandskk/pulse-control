@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MoreVertical, Pencil, Plus, Smartphone, Trash2 } from "lucide-react";
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -45,6 +46,7 @@ import {
   fetchDevices,
   updateDevice,
 } from "@/lib/api-client";
+import { comandosComNumeroHref } from "@/lib/constants/navigation";
 import { APP_SHELL_CONTAINER } from "@/lib/constants/layout";
 import {
   emptyStateCtaButtonProps,
@@ -185,7 +187,11 @@ export function NumerosPage() {
                 key={d.id}
                 className="flex min-w-0 items-start gap-2 px-3 py-3.5 transition-colors hover:bg-muted/20 sm:px-4"
               >
-                <div className="min-w-0 flex-1 space-y-1">
+                <Link
+                  href={comandosComNumeroHref(d.id)}
+                  className="min-w-0 flex-1 space-y-1 rounded-lg text-left outline-none ring-offset-2 transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+                  aria-label={`Abrir comandos para ${d.name}`}
+                >
                   <p className="font-medium leading-snug text-foreground">
                     {d.name}
                   </p>
@@ -197,7 +203,7 @@ export function NumerosPage() {
                       {d.description}
                     </p>
                   ) : null}
-                </div>
+                </Link>
                 <DropdownMenu>
                   <RowActionsMenuTrigger aria-label={`Ações: ${d.name}`}>
                     <MoreVertical className="size-4" aria-hidden />

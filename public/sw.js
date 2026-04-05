@@ -1,5 +1,5 @@
 /* PulseControl — service worker mínimo (cache conservador; sem offline-first) */
-const CACHE = "pulse-control-static-v1";
+const CACHE = "pulse-control-static-v3";
 
 self.addEventListener("install", (event) => {
   self.skipWaiting();
@@ -31,5 +31,8 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       caches.match(request).then((cached) => cached || fetch(request)),
     );
+    return;
   }
+  /* Pass-through: o SW controla o documento e pedidos same-origin (critérios de instalabilidade). */
+  event.respondWith(fetch(request));
 });

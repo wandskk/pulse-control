@@ -30,6 +30,7 @@ import {
 } from "@/lib/api-client";
 import { BRAND_LOGO_SRC } from "@/lib/constants/brand";
 import { APP_SHELL_CONTAINER } from "@/lib/constants/layout";
+import { InstallPwaMenuItem } from "@/components/shared/install-pwa";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
@@ -69,8 +70,8 @@ export function SiteHeader() {
           <Image
             src={BRAND_LOGO_SRC}
             alt=""
-            width={220}
-            height={56}
+            width={970}
+            height={257}
             className="h-9 w-auto max-w-full object-contain object-left sm:h-10"
             priority
           />
@@ -204,6 +205,7 @@ export function SiteHeader() {
                     Contas
                   </Link>
                 ) : null}
+                <InstallPwaMenuItem onAfterPick={() => setMenuOpen(false)} />
                 {showLogout ? (
                   <Button
                     type="button"

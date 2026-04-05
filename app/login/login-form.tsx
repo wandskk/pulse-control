@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { BRAND_LOGO_SRC } from "@/lib/constants/brand";
 import { APP_SHELL_CONTAINER } from "@/lib/constants/layout";
 import { formPrimarySubmitFullWidthClassName } from "@/lib/constants/ui";
+import { InstallPwaLoginHint } from "@/components/shared/install-pwa";
 import { cn } from "@/lib/utils";
 
 export function LoginForm() {
@@ -141,10 +142,10 @@ export function LoginForm() {
       <div className="mb-8 flex flex-col items-center text-center">
         <Image
           src={BRAND_LOGO_SRC}
-          alt="PulseControl"
-          width={320}
-          height={80}
-          className="h-auto w-full max-w-[min(100%,280px)] object-contain"
+          alt="PulseControl — logotipo"
+          width={970}
+          height={257}
+          className="h-auto w-full max-w-[min(100%,320px)] object-contain"
           priority
         />
         <p className="mt-4 text-sm text-muted-foreground">
@@ -205,6 +206,7 @@ export function LoginForm() {
               : "Entrar"}
         </Button>
       </form>
+      <InstallPwaLoginHint className="mt-6" />
     </div>
   );
 }

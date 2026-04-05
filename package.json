@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "postinstall": "prisma generate",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "icons:generate": "node scripts/generate-icons-once.mjs"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

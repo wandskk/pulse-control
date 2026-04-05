@@ -1,4 +1,4 @@
-/** Logo horizontal em `public/` (login, header, etc.) */
+/** Logo horizontal (ícone + texto PulseControl) em `public/logo-pulse-control.png` */
 export const BRAND_LOGO_SRC = "/logo-pulse-control.png" as const;
 
 /** Paleta PulseControl (logo) — manifest, viewport e referência UI */

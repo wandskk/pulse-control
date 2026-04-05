@@ -10,7 +10,10 @@ export type SessionUser = AuthSessionUser;
 export type { AdminUserRow, AuthSessionInfo } from "@/lib/types/auth";
 
 export async function fetchAuthSession(): Promise<AuthSessionInfo> {
-  const res = await fetch("/api/auth/session", { cache: "no-store" });
+  const res = await fetch("/api/auth/session", {
+    cache: "no-store",
+    credentials: "same-origin",
+  });
   const json = await parseJson<
     AuthSessionInfo & { user?: AuthSessionUser | null }
   >(res);

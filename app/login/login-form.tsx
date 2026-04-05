@@ -35,10 +35,19 @@ export function LoginForm() {
           ) as Promise<{ needsBootstrap?: boolean }>,
           fetch("/api/auth/session", { cache: "no-store" }).then((r) =>
             r.json(),
-          ) as Promise<{ authRequired?: boolean }>,
+          ) as Promise<{
+            authRequired?: boolean;
+            authenticated?: boolean;
+            user?: { id: string } | null;
+          }>,
         ]);
         if (s.authRequired === false) {
           router.replace("/");
+          return;
+        }
+        if (s.authRequired && s.authenticated && s.user) {
+          const dest = searchParams.get("from");
+          router.replace(dest && dest.startsWith("/") ? dest : "/");
           return;
         }
         setNeedsBootstrap(Boolean(b.needsBootstrap));
@@ -47,7 +56,7 @@ export function LoginForm() {
         setNeedsBootstrap(false);
       }
     })();
-  }, [router]);
+  }, [router, searchParams]);
 
   const onSubmitBootstrap = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,9 +1,19 @@
 import { type NextRequest, NextResponse } from "next/server";
-import {
-  SESSION_COOKIE,
-  isAuthConfigured,
-  verifySessionToken,
-} from "./lib/auth/jwt-verify";
+
+/** Mesmo valor que `lib/constants/session.ts` — inline para o Edge não importar outros módulos. */
+const SESSION_COOKIE_NAME = "pulse_session";
+
+/**
+ * Edge (Vercel): só `next/server` + env + nome do cookie.
+ * JWT continua validado nas rotas API (`getSessionFromRequest` / jose no Node).
+ */
+function isAuthConfigured(): boolean {
+  return Boolean(process.env.AUTH_SECRET?.trim());
+}
+
+function hasSessionCookie(request: NextRequest): boolean {
+  return Boolean(request.cookies.get(SESSION_COOKIE_NAME)?.value);
+}
 
 export async function middleware(request: NextRequest) {
   if (!isAuthConfigured()) {
@@ -17,13 +27,6 @@ export async function middleware(request: NextRequest) {
   }
 
   if (pathname === "/login") {
-    const loginToken = request.cookies.get(SESSION_COOKIE)?.value;
-    const loginSession = loginToken
-      ? await verifySessionToken(loginToken)
-      : null;
-    if (loginSession) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
     return NextResponse.next();
   }
 
@@ -36,17 +39,16 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = request.cookies.get(SESSION_COOKIE)?.value;
-  const session = token ? await verifySessionToken(token) : null;
+  const hasCookie = hasSessionCookie(request);
 
   if (pathname.startsWith("/api/")) {
-    if (!session) {
+    if (!hasCookie) {
       return NextResponse.json({ message: "Não autorizado" }, { status: 401 });
     }
     return NextResponse.next();
   }
 
-  if (!session) {
+  if (!hasCookie) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("from", pathname);

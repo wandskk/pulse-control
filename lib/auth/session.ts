@@ -1,8 +1,7 @@
 import { SignJWT, jwtVerify } from "jose";
 import type { NextRequest } from "next/server";
-import type { UserRole } from "@prisma/client";
 import { SESSION_COOKIE } from "@/lib/constants/session";
-import type { SessionClaims } from "@/lib/types/auth";
+import type { SessionClaims, UserRole } from "@/lib/types/auth";
 
 export { SESSION_COOKIE } from "@/lib/constants/session";
 export type { SessionClaims } from "@/lib/types/auth";
